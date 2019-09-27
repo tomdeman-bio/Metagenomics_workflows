@@ -62,8 +62,6 @@ sub parsehumman2 {
 
         my $len = scalar (@split);
         #will change, current settings are for dummy file - next two lines not needed for HMP humann2 output file
-        #my @subsplit = splice @split,2,$len;
-        #my $taxa = shift @subsplit;
 
         my $pathway_and_taxa = shift @split;
         my @pathway_taxa_for_split = split (/\|/, $pathway_and_taxa);
@@ -71,14 +69,10 @@ sub parsehumman2 {
         my $taxa = $pathway_taxa_for_split[1];
 
         if (index($taxa, $species_filter) == -1) {
-            #print "filter: $species_filter\n";
-            #print "test: $taxa\n";
             next;
         }
         print "species filter check: $taxa\n";
 
-        #print "$taxa\n";
-        #$samples = scalar (@subsplit);
         $samples = scalar (@split);
 
         if ($pathway eq $check) {
@@ -91,7 +85,6 @@ sub parsehumman2 {
 
         if ($bool == 1) {
             #add taxa with associated function abundance data as long as you do not encounter a new pathway
-            #$pathway_abuns{$taxa} = \@subsplit;
             $pathway_abuns{$taxa} = \@split;
 
             $check = $pathway;
@@ -107,11 +100,9 @@ sub parsehumman2 {
                 foreach my $key (keys %onesample) {
                     my $pathwayrow = "$check\t$key\t$onesample{$key}\t";
                     $pathway_sum_one_sample += $onesample{$key};
-                    #print "$pathwayrow\n";
 
                 }
                 #store the sum of a pathway abundance for one sample
-                #print "total for $check: $pathway_sum_one_sample\n";
                 push @summed_pathway_abundance, $pathway_sum_one_sample;
                 $pathway_sum_one_sample = 0;
             }
@@ -123,7 +114,6 @@ sub parsehumman2 {
             undef %pathway_abuns;
 
             #start new pathway
-            #$pathway_abuns{$taxa} = \@subsplit;
             $pathway_abuns{$taxa} = \@split;
             $check = $pathway;
         }
@@ -140,7 +130,6 @@ sub parsehumman2 {
         foreach my $key (keys %onesample) {
             my $pathwayrow = "$check\t$key\t$onesample{$key}\t";
             $pathway_sum_one_sample += $onesample{$key};
-            #print "$pathwayrow\n";
 
         }
         #print "total for $check: $pathway_sum_one_sample\n";
@@ -171,10 +160,10 @@ sub identify_core {
     #grab the top 75%
     my @top = splice(@ordered, (scalar @ordered - $percent));
 
-    print "lower limit: $top[0]\n";
-    print "higher limit: $top[-1]\n";
+    #print "lower limit: $top[0]\n";
+    #print "higher limit: $top[-1]\n";
     #core pathway abundance lower limit
-    if ($top[0] >= 1E-04) {
+    if ($top[0] > 1E-04) {
         push @core_pathways, $pathway_id;
     }
 

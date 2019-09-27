@@ -65,12 +65,8 @@ sub parsehumman2 {
 
         my $len = scalar (@split);
         #will change, current settings are for dummy file - next two lines not needed for HMP humann2 output file
-        #my @subsplit = splice @split,2,$len;
-        #my $taxa = shift @subsplit;
         my $pathway1 = shift @split;
 
-        #print "$taxa\n";
-        #$samples = scalar (@subsplit);
         $samples = scalar (@split);
 
         if ($pathway1 eq $check) {
@@ -83,7 +79,6 @@ sub parsehumman2 {
 
         if ($bool == 1) {
             #add taxa with associated function abundance data as long as you do not encounter a new pathway
-            #$pathway_abuns{$taxa} = \@subsplit;
             $pathway_abuns{$pathway1} = \@split;
 
             $check = $pathway1;
@@ -115,7 +110,6 @@ sub parsehumman2 {
             undef %pathway_abuns;
 
             #start new pathway
-            #$pathway_abuns{$taxa} = \@subsplit;
             $pathway_abuns{$pathway1} = \@split;
             $check = $pathway1;
         }
@@ -163,10 +157,10 @@ sub identify_core {
     #grab the top 75%
     my @top = splice(@ordered, (scalar @ordered - $percent));
 
-    print "lower limit: $top[0]\n";
-    print "higher limit: $top[-1]\n";
+    #print "lower limit: $top[0]\n";
+    #print "higher limit: $top[-1]\n";
     #core pathway abundance lower limit
-    if ($top[0] >= 1E-04) {
+    if ($top[0] > 1E-04) {
         push @core_pathways, $pathway_id;
       }
 
